@@ -1,0 +1,43 @@
+telegram:
+  api_id: 1234567
+  api_hash: "0123456789abcdef0123456789abcdef"
+  session_name: "session_forwarder"
+  # phone is only prompted during initial auth login
+  phone: "+1234567890"
+
+metrics:
+  enabled: true
+  host: "0.0.0.0"
+  port: 9102
+
+rules:
+  - name: "security-alerts"
+    sources:
+      - "@cve_feed"
+      - -1001234567890
+    match_patterns:
+      - "(?i)critical"
+      - "(?i)0-day|zero-day"
+      - "(?i)rce"
+    ignore_patterns:
+      - "(?i)crypto|airdrop|giveaway"
+    targets:
+      telegram:
+        - -1009876543210
+      webhooks:
+        - url: "https://alerts.example.com/api/v1/tg-ingress"
+          headers:
+            Authorization: "Bearer secret-token-here"
+            X-Source: "tg-forwarder"
+          timeout_seconds: 5.0
+          # if true, sends raw text payload instead of structured json
+          plain_payload: false
+
+  - name: "devops-catchall"
+    sources:
+      - "@infra_incidents"
+    match_patterns:
+      - ".*"
+    targets:
+      webhooks:
+        - url: "http://127.0.0.1:8080/events"
