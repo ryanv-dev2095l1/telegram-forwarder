@@ -65,3 +65,5 @@ WantedBy=multi-user.target
 ```bash
 pytest
 ```
+
+<!-- last-sync: 2026-09-08 -->
