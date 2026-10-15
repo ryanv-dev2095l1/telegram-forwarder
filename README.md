@@ -66,4 +66,4 @@ WantedBy=multi-user.target
 pytest
 ```
 
-<!-- last-sync: 2026-10-14 -->
+<!-- last-sync: 2026-10-15 -->
